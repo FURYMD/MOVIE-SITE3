@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<script>
+async function loadMovies(){
+  let res = await fetch('/movies');
+  let data = await res.json();
+  render(data);
+}
+
+function render(data){
+  let grid = document.getElementById('grid');
+  grid.innerHTML = '';
+
+  data.forEach(m=>{
+    grid.innerHTML += `
+      <div class="card" onclick="play('${m.video}')">
+        <img src="${m.image}">
+        <p>${m.title}</p>
+      </div>
+    `;
+  });
+}
+
+// SEARCH
+search.oninput = async (e)=>{
+  let res = await fetch('/search?q='+e.target.value);
+  let data = await res.json();
+  render(data);
+};
+
+function play(url){
+  document.getElementById('grid').style.display='none';
+  document.getElementById('playerBox').style.display='block';
+  document.getElementById('player').src=url;
+}
+
+function back(){
+  document.getElementById('grid').style.display='grid';
+  document.getElementById('playerBox').style.display='none';
+}
+
+loadMovies();
+</script>
+
+</body>
+</html>
